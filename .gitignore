@@ -1,0 +1,15 @@
+# Abaikan environment virtual
+venv/
+__pycache__/
+
+# Abaikan file sementara/editor
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.tmp
+*.swp
+.DS_Store
+
+# Abaikan file backup python
+*copy.py
