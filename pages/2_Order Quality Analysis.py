@@ -5,6 +5,9 @@ from utils.load_data import load_all_datasets
 from utils.global_style import inject_global_style
 
 inject_global_style()
+st.set_page_config(
+    layout="wide",
+)
 
 datasets = load_all_datasets()
 orders = datasets["orders"]

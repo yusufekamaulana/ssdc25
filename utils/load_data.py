@@ -8,6 +8,9 @@ def load_all_datasets():
 
     def load(file_name):
         return pd.read_csv(os.path.join(DATASET_DIR, file_name))
+    
+    def load_xlsx(file_name):
+        return pd.read_excel(os.path.join(DATASET_DIR, file_name))
 
     closed_deals = load("closed_deals_dataset.csv")
     customers = load("customers_dataset.csv")
@@ -20,6 +23,7 @@ def load_all_datasets():
     product_category_translation = load("product_category_name_translation.csv")
     products = load("products_dataset.csv")
     sellers = load("sellers_dataset.csv")
+    topics = load_xlsx("review_translated_topic.xlsx")
 
     return {
         "closed_deals": closed_deals,
@@ -32,5 +36,6 @@ def load_all_datasets():
         "orders": orders,
         "product_category_translation": product_category_translation,
         "products": products,
-        "sellers": sellers
+        "sellers": sellers,
+        "topics":topics
     }
