@@ -9,6 +9,9 @@ inject_global_style()
 datasets = load_all_datasets()
 orders = datasets["orders"]
 order_items = datasets["order_items"]
+customers = datasets['customers']
+orders = orders.merge(customers[['customer_id', 'customer_state']], on='customer_id', how='left')
+
 
 # Format tanggal
 orders['order_purchase_timestamp'] = pd.to_datetime(orders['order_purchase_timestamp'])
@@ -44,6 +47,52 @@ if start_date > end_date:
 # Filter orders
 filtered_orders = orders[(orders['order_purchase_timestamp'] >= pd.to_datetime(start_date)) &
                          (orders['order_purchase_timestamp'] <= pd.to_datetime(end_date))].copy()
+
+# Dropdown filter region (customer_state)
+state_mapping = {
+    'SP': 'São Paulo',
+    'SC': 'Santa Catarina',
+    'MG': 'Minas Gerais',
+    'PR': 'Paraná',
+    'RJ': 'Rio de Janeiro',
+    'RS': 'Rio Grande do Sul',
+    'PA': 'Pará',
+    'GO': 'Goiás',
+    'ES': 'Espírito Santo',
+    'BA': 'Bahia',
+    'MA': 'Maranhão',
+    'MS': 'Mato Grosso do Sul',
+    'CE': 'Ceará',
+    'DF': 'Distrito Federal',
+    'RN': 'Rio Grande do Norte',
+    'PE': 'Pernambuco',
+    'MT': 'Mato Grosso',
+    'AM': 'Amazonas',
+    'AP': 'Amapá',
+    'AL': 'Alagoas',
+    'RO': 'Rondônia',
+    'PB': 'Paraíba',
+    'TO': 'Tocantins',
+    'PI': 'Piauí',
+    'AC': 'Acre',
+    'SE': 'Sergipe',
+    'RR': 'Roraima'
+}
+# Mengambil daftar customer_state dari data yang terfilter
+region_options = filtered_orders['customer_state'].dropna().unique().tolist()
+
+# Mapping kode state ke nama lengkap menggunakan dictionary
+region_options_display = [state_mapping[state] for state in region_options]
+
+# Dropdown filter region (customer_state) dengan nama lengkap
+selected_region = st.selectbox("Select Region (Customer State)", options=["All"] + region_options_display)
+
+# Filter berdasarkan region jika dipilih
+if selected_region != "All":
+    # Cari kode state dari nama lengkap yang dipilih
+    selected_region_code = [key for key, value in state_mapping.items() if value == selected_region][0]
+    filtered_orders = filtered_orders[filtered_orders['customer_state'] == selected_region_code]
+
 
 # Chart 1: Non-damaged (delivered)
 filtered_orders['year_month'] = filtered_orders['order_purchase_timestamp'].dt.to_period('M')
@@ -201,7 +250,9 @@ with st.container():
 with st.container():
     col3, col4 = st.columns([5, 3])
     with col3:
-        st.markdown("<h4 style='text-align:center;'>% On-time Delivery</h4>", unsafe_allow_html=True)
+        # Judul chart dinamis berdasarkan region
+        st.markdown(f"<h4 style='text-align:center;'>% On-time Delivery{' for ' + selected_region if selected_region != 'All' else ''}</h4>", unsafe_allow_html=True)
+
         html3 = f"""
         <div class='bg-white rounded-lg shadow-md p-4' style='height:375px;'><canvas id='line2'></canvas></div>
         <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
