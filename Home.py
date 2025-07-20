@@ -34,12 +34,13 @@ with cols[0]:
 with cols[1]:
     st.markdown(f"""
     <div style="background-color: #f0f2f6; padding: 20px; border-radius: 12px; box-shadow: 2px 2px 10px rgba(0,0,0,0.05); text-align: center;">
-        <h3>Visualization Templates</h3>
-        <p>Reusable data visualization templates for your analysis</p>
-        <a href="Visualisasi_Template" target="_self">
+        <h3>Order Quality Analysis</h3>
+        <p>Analyze order completeness, delivery time, and quality</p>
+        <a href="Order_Quality_Analysis" target="_self">
             <button style="background: linear-gradient(to right, #667eea, #764ba2); border: none; color: white; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
                 Open Page
             </button>
         </a>
     </div>
     """, unsafe_allow_html=True)
+
