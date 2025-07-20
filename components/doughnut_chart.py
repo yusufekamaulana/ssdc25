@@ -14,9 +14,7 @@ def render_doughnut_chart(order_reviews):
     ]
 
     doughnut_html = f"""
-    <div class="bg-white rounded-lg shadow-md p-4" style="height:375px;">
-        <canvas id="reviewDoughnut"></canvas>
-    </div>
+    <div class="bg-white rounded-lg shadow-md p-4" style="height:375px;"><canvas id="reviewDoughnut"></canvas></div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
     new Chart(document.getElementById('reviewDoughnut'), {{
