@@ -2,7 +2,7 @@ import streamlit as st
 from utils.global_style import inject_global_style
 
 st.set_page_config(
-    page_title="DELIVERY PERFORMANCE DASHBOARD",
+    page_title="CUSTOMER EXPERIENCE DASHBOARD",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -10,7 +10,7 @@ st.set_page_config(
 inject_global_style()
 
 # Main header
-st.markdown("<h1 style='text-align: center;'>Delivery Performance Dashboard</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>Customer Experience Dashboard</h1>", unsafe_allow_html=True)
 st.markdown("<h4 style='text-align: center; color: gray;'>Please select a section below to get started</h4>", unsafe_allow_html=True)
 st.markdown("---")
 
