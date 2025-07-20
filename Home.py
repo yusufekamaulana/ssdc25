@@ -2,7 +2,7 @@ import streamlit as st
 from utils.global_style import inject_global_style
 
 st.set_page_config(
-    page_title="CUSTOMER EXPERIENCE DASHBOARD",
+    page_title="DELIVERY PERFORMANCE DASHBOARD",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -10,7 +10,7 @@ st.set_page_config(
 inject_global_style()
 
 # Main header
-st.markdown("<h1 style='text-align: center;'>Customer Experience Dashboard</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>Delivery Performance Dashboard</h1>", unsafe_allow_html=True)
 st.markdown("<h4 style='text-align: center; color: gray;'>Please select a section below to get started</h4>", unsafe_allow_html=True)
 st.markdown("---")
 
@@ -18,6 +18,19 @@ st.markdown("---")
 cols = st.columns(2)
 
 with cols[0]:
+    st.markdown(f"""
+    <div style="background-color: #f0f2f6; padding: 20px; border-radius: 12px; box-shadow: 2px 2px 10px rgba(0,0,0,0.05); text-align: center;">
+        <h3>Delivery Performance Analysis</h3>
+        <p>Analyze order completeness, delivery time, and quality</p>
+        <a href="Delivery_Performance_Analysis" target="_self">
+            <button style="background: linear-gradient(to right, #667eea, #764ba2); border: none; color: white; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
+                Open Page
+            </button>
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
+
+with cols[1]:
     st.markdown(f"""
     <div style="background-color: #f0f2f6; padding: 20px; border-radius: 12px; box-shadow: 2px 2px 10px rgba(0,0,0,0.05); text-align: center;">
         <h3>Customer Satisfaction</h3>
@@ -29,17 +42,3 @@ with cols[0]:
         </a>
     </div>
     """, unsafe_allow_html=True)
-
-with cols[1]:
-    st.markdown(f"""
-    <div style="background-color: #f0f2f6; padding: 20px; border-radius: 12px; box-shadow: 2px 2px 10px rgba(0,0,0,0.05); text-align: center;">
-        <h3>Order Quality Analysis</h3>
-        <p>Analyze order completeness, delivery time, and quality</p>
-        <a href="Order_Quality_Analysis" target="_self">
-            <button style="background: linear-gradient(to right, #667eea, #764ba2); border: none; color: white; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
-                Open Page
-            </button>
-        </a>
-    </div>
-    """, unsafe_allow_html=True)
-
