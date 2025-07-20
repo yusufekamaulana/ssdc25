@@ -1,4 +1,5 @@
 import streamlit as st
+import plotly.express as px
 import pandas as pd
 import json
 from utils.load_data import load_all_datasets
@@ -367,3 +368,88 @@ with st.container():
         """
         st.components.v1.html(html4, height=400)
         st.markdown("<br>", unsafe_allow_html=True)
+
+# Definisikan koordinat geografis untuk setiap state
+state_coordinates = {
+    'SP': [-23.5505, -46.6333],  # São Paulo
+    'SC': [-27.5954, -48.5480],  # Santa Catarina
+    'MG': [-19.8157, -43.9542],  # Minas Gerais
+    'PR': [-25.4284, -49.2733],  # Paraná
+    'RJ': [-22.9068, -43.1729],  # Rio de Janeiro
+    'RS': [-30.0346, -51.2177],  # Rio Grande do Sul
+    'PA': [-1.4550, -48.4900],   # Pará
+    'GO': [-16.6868, -49.2647],  # Goiás
+    'ES': [-20.3155, -40.3128],  # Espírito Santo
+    'BA': [-12.9714, -38.5014],  # Bahia
+    'MA': [-2.5396, -44.2807],   # Maranhão
+    'MS': [-20.4697, -54.6201],  # Mato Grosso do Sul
+    'CE': [-3.7172, -38.5437],   # Ceará
+    'DF': [-15.7801, -47.9292],  # Distrito Federal
+    'RN': [-5.7945, -35.2110],   # Rio Grande do Norte
+    'PE': [-8.0476, -34.8770],   # Pernambuco
+    'MT': [-12.6376, -56.0966],  # Mato Grosso
+    'AM': [-3.1190, -60.1770],   # Amazonas
+    'AP': [0.9020, -52.0173],    # Amapá
+    'AL': [-9.5714, -36.7820],   # Alagoas
+    'RO': [-10.1905, -64.9039],  # Rondônia
+    'PB': [-7.1151, -34.8610],   # Paraíba
+    'TO': [-10.1851, -48.3337],  # Tocantins
+    'PI': [-5.0891, -42.8014],   # Piauí
+    'AC': [-8.7737, -70.5510],   # Acre
+    'SE': [-10.9472, -37.0731],  # Sergipe
+    'RR': [2.8311, -60.6743]     # Roraima
+}
+
+# Hitung jumlah pengiriman per customer_state
+delivery_by_state = filtered_orders.groupby('customer_state').agg(
+    total_orders=('order_id', 'count'),
+    on_time_orders=('on_time', 'sum'),
+    late_orders=('on_time', lambda x: (x == False).sum())
+).reset_index()
+
+# Koordinat geografis untuk setiap state
+# Pastikan `state_coordinates` sudah terdefinisi seperti sebelumnya
+delivery_by_state['lat'], delivery_by_state['lon'] = zip(*delivery_by_state['customer_state'].map(lambda x: state_coordinates.get(x, [None, None])))
+
+# Dropdown pilihan metrik
+metric = st.radio("Pilih Metode Evaluasi Pengiriman:", ("Pengiriman Tepat Waktu", "Pengiriman Terlambat"))
+
+if metric == "Pengiriman Tepat Waktu":
+    color_column = 'on_time_orders'
+    legend_title = "Jumlah Tepat Waktu"
+else:
+    color_column = 'late_orders'
+    legend_title = "Jumlah Terlambat"
+
+# Plot peta
+fig = px.scatter_geo(
+    delivery_by_state,
+    lat='lat',
+    lon='lon',
+    color=color_column,
+    hover_name='customer_state',
+    size='total_orders',
+    color_continuous_scale='Plasma',
+    projection='natural earth',
+    title="Heatmap Status Pengiriman per Region",
+    labels={color_column: legend_title},
+    template='plotly_white'
+)
+
+# Fokus otomatis ke wilayah Brasil berdasarkan data yang tersedia
+fig.update_geos(
+    showcountries=True,
+    countrycolor="gray",
+    showcoastlines=True,
+    coastlinecolor="lightgray",
+    showland=True,
+    landcolor="whitesmoke",
+    showocean=True,
+    oceancolor="azure",
+    fitbounds="locations",  # << auto-zoom ke titik data
+    lataxis_range=[-35, 5],  # << mempertegas fokus lat
+    lonaxis_range=[-75, -30] # << mempertegas fokus lon
+)
+
+# Tampilkan peta
+st.plotly_chart(fig, use_container_width=True)
