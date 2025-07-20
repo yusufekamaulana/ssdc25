@@ -1,7 +1,6 @@
 import streamlit as st
 from utils.global_style import inject_global_style
 
-# Page configuration
 st.set_page_config(
     page_title="DELIVERY PERFORMANCE DASHBOARD",
     layout="wide",
